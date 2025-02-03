@@ -1,4 +1,13 @@
 # Databricks notebook source
+# MAGIC %pip install git+https://github.com/databricks-academy/dbacademy@v3.0.70
+# MAGIC
+
+# COMMAND ----------
+
+# MAGIC %python dbutils.library.restartPython()
+
+# COMMAND ----------
+
 def __validate_libraries():
     import requests
     try:
@@ -16,7 +25,7 @@ def __install_libraries():
     
     specified_version = f"v3.0.70"
     key = "dbacademy.library.version"
-    version = spark.conf.get(key, specified_version)
+    version = specified_version
 
     if specified_version != version:
         print("** Dependency Version Overridden *******************************************************************")
@@ -41,7 +50,7 @@ def __install_libraries():
         else: library_url = f"https://github.com/databricks-academy/dbacademy/releases/download/{version}/dbacademy-{version[1:]}-py3-none-any.whl"
 
         default_command = f"install --quiet --disable-pip-version-check {library_url}"
-        pip_command = spark.conf.get("dbacademy.library.install", default_command)
+        pip_command = f"install git+https://github.com/databricks-academy/dbacademy@v3.0.70"
 
         if pip_command != default_command:
             print(f"WARNING: Using alternative library installation:\n| default: %pip {default_command}\n| current: %pip {pip_command}")
@@ -62,7 +71,6 @@ __install_libraries()
 # COMMAND ----------
 
 import pyspark.sql.functions as F
-from dbacademy import dbgems
 from dbacademy.dbhelper import DBAcademyHelper, Paths, CourseConfig, LessonConfig
 
 # The following attributes are externalized to make them easy
@@ -90,7 +98,6 @@ lesson_config = LessonConfig(name = None,
 
 @DBAcademyHelper.monkey_patch
 def clone_source_table(self, table_name, source_path, source_name=None):
-    start = dbgems.clock_start()
 
     source_name = table_name if source_name is None else source_name
     print(f"Cloning the \"{table_name}\" table from \"{source_path}/{source_name}\".", end="...")
@@ -100,7 +107,6 @@ def clone_source_table(self, table_name, source_path, source_name=None):
         SHALLOW CLONE delta.`{source_path}/{source_name}`
         """)
     
-    print(dbgems.clock_stopped(start))
 
 
 
@@ -125,4 +131,8 @@ def display_config_values(self, config_values):
 ANALYSTS_ROLE_NAME = "analysts"
 
 None
+
+
+# COMMAND ----------
+
 

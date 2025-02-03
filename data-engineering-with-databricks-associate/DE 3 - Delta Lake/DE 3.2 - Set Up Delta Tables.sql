@@ -55,8 +55,8 @@
 
 -- COMMAND ----------
 
-CREATE OR REPLACE TABLE sales AS
-SELECT * FROM parquet.`${DA.paths.datasets}/ecommerce/raw/sales-historical`;
+CREATE OR REPLACE TABLE sales USING DELTA AS
+SELECT * FROM parquet.`${da.paths.datasets}/ecommerce/raw/sales-historical`;
 
 DESCRIBE EXTENDED sales;
 
