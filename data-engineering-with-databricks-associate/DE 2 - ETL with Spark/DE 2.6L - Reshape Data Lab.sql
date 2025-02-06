@@ -101,12 +101,28 @@
 
 -- COMMAND ----------
 
+SELECT * FROM events
+LIMIT 1
+
+-- COMMAND ----------
+
 -- TODO
-CREATE OR REPLACE TEMP VIEW events_pivot
-<FILL_IN>
-("cart", "pillows", "login", "main", "careers", "guest", "faq", "down", "warranty", "finalize", 
-"register", "shipping_info", "checkout", "mattresses", "add_item", "press", "email_coupon", 
-"cc_info", "foam", "reviews", "original", "delivery", "premium")
+CREATE OR REPLACE TEMP VIEW events_pivot AS 
+SELECT *
+FROM (
+    SELECT user_id AS user, event_name
+    FROM events
+    GROUP BY user_id, event_name
+)
+PIVOT (
+    COUNT("*") FOR event_name IN
+    ("cart", "pillows", "login", "main", "careers", "guest", "faq", "down", "warranty", "finalize", 
+    "register", "shipping_info", "checkout", "mattresses", "add_item", "press", "email_coupon", 
+    "cc_info", "foam", "reviews", "original", "delivery", "premium")
+);
+
+SELECT * FROM events_pivot
+
 
 -- COMMAND ----------
 
@@ -119,9 +135,15 @@ CREATE OR REPLACE TEMP VIEW events_pivot
 
 -- MAGIC %python
 -- MAGIC # TODO
--- MAGIC (spark.read
--- MAGIC     <FILL_IN>
+-- MAGIC (spark.read.table("events")
+-- MAGIC     .groupBy("user_id")
+-- MAGIC     .pivot("event_name")
+-- MAGIC     .count()
+-- MAGIC     .withColumnRenamed("user_id", "user")
+-- MAGIC     .drop("user_id")
 -- MAGIC     .createOrReplaceTempView("events_pivot"))
+-- MAGIC
+-- MAGIC spark.read.table("events_pivot").show(3)
 
 -- COMMAND ----------
 
@@ -182,7 +204,11 @@ CREATE OR REPLACE TEMP VIEW events_pivot
 
 -- TODO
 CREATE OR REPLACE TEMP VIEW clickpaths AS
-<FILL_IN>
+SELECT * FROM events_pivot e
+INNER JOIN transactions t
+ON t.user_id = e.user
+
+
 
 -- COMMAND ----------
 
@@ -195,8 +221,10 @@ CREATE OR REPLACE TEMP VIEW clickpaths AS
 
 -- MAGIC %python
 -- MAGIC # TODO
--- MAGIC (spark.read
--- MAGIC     <FILL_IN>
+-- MAGIC events_pivot = spark.table("events_pivot")
+-- MAGIC transactions = spark.table("transactions")
+-- MAGIC (events_pivot
+-- MAGIC     .join(transactions, events_pivot.user ==transactions.user_id)
 -- MAGIC     .createOrReplaceTempView("clickpaths"))
 
 -- COMMAND ----------

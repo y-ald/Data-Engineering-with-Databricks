@@ -189,6 +189,12 @@ SELECT user_id,
   collect_set(event_name) AS event_history,
   array_distinct(flatten(collect_set(items.item_id))) AS cart_history
 FROM exploded_events
+GROUP BY user_id;
+
+SELECT user_id,
+  collect_set(event_name) AS event_history,
+  collect_set(items.item_id) AS cart_history
+FROM exploded_events
 GROUP BY user_id
 
 -- COMMAND ----------
@@ -292,7 +298,7 @@ PIVOT (
 -- MAGIC         "item",
 -- MAGIC         "name",
 -- MAGIC         "price")
--- MAGIC     .pivot("item_id")
+-- MAGIC     .pivot(" ")
 -- MAGIC     .sum("item.quantity")
 -- MAGIC )
 -- MAGIC display(transactionsDF)
