@@ -71,6 +71,7 @@ __install_libraries()
 # COMMAND ----------
 
 import pyspark.sql.functions as F
+from dbacademy import dbgems  
 from dbacademy.dbhelper import DBAcademyHelper, Paths, CourseConfig, LessonConfig
 
 # The following attributes are externalized to make them easy

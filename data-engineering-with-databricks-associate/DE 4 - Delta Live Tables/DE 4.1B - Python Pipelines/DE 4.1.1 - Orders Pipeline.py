@@ -1,4 +1,8 @@
 # Databricks notebook source
+# MAGIC  %pip install dlt
+
+# COMMAND ----------
+
 # MAGIC %md-sandbox
 # MAGIC
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -61,10 +65,11 @@
 
 # COMMAND ----------
 
+!pip install --upgrade dlt
 import dlt
 import pyspark.sql.functions as F
 
-source = spark.conf.get("source")
+#source = spark.conf.get("source")
 
 # COMMAND ----------
 

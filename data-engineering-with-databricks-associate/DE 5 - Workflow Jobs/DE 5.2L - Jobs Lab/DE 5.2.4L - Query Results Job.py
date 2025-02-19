@@ -59,6 +59,11 @@ display(files)
 
 # COMMAND ----------
 
+files = dbutils.fs.ls(f"{DA.paths.storage_location}/tables/daily_patient_avg")
+display(files)
+
+# COMMAND ----------
+
 # DBTITLE 0,--i18n-72eb29d2-cde0-4488-954b-a0ed47ead8eb
 # MAGIC %md
 # MAGIC
@@ -68,7 +73,7 @@ display(files)
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC SELECT * FROM ${DA.schema_name}.daily_patient_avg
+# MAGIC SELECT * FROM DELTA.`${DA.paths.storage_location}/tables/daily_patient_avg`
 
 # COMMAND ----------
 

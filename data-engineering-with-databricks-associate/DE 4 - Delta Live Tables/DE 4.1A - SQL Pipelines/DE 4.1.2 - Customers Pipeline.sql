@@ -46,7 +46,7 @@
 
 CREATE OR REFRESH STREAMING LIVE TABLE customers_bronze
 COMMENT "Raw data from customers CDC feed"
-AS SELECT current_timestamp() processing_time, input_file_name() source_file, *
+AS SELECT current_timestamp() processing_time, _metadata.file_name source_file, *
 FROM cloud_files("${source}/customers", "json")
 
 -- COMMAND ----------

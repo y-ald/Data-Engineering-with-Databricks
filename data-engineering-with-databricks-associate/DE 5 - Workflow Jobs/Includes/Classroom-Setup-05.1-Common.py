@@ -27,7 +27,7 @@ def get_job_config(self):
     job_name = f"{unique_name}: Example Job"
     
     parts = dbutils.entry_point.getDbutils().notebook().getContext().notebookPath().getOrElse(None).split("/")[:-1]
-    notebook = "/".join(parts) + "/DE 5.1.2 - Reset"
+    notebook = "/Workspace" + "/".join(parts) + "/DE 5.1.2 - Reset"
 
     return JobConfig(job_name, notebook)
 
@@ -140,7 +140,7 @@ def validate_job_v1_config(self):
     # print(json.dumps(job, indent=4))
     
     settings = job.get("settings")
-    
+
     if settings.get("format") == "SINGLE_TASK":
         notebook_path = settings.get("notebook_task", {}).get("notebook_path")
         actual_cluster_id = settings.get("existing_cluster_id", None)
@@ -156,7 +156,7 @@ def validate_job_v1_config(self):
         assert task_key == "Rest", f"Expected the first task to have the name \"Reset\", found \"{task_key}\""
         
         
-    assert notebook_path == job_config.notebook, f"Invalid Notebook Path. Found \"{notebook_path}\", expected \"{job_config.reset_notebook}\" "
+    assert notebook_path == job_config.notebook, f"Invalid Notebook Path. Found \"{notebook_path}\", expected \"{job_config.notebook}\" "
     
     if not self.is_smoke_test():
         # Don't check the actual_cluster_id when running as a smoke test

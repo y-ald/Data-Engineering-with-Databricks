@@ -33,6 +33,10 @@
 
 # COMMAND ----------
 
+print(DA.schema_name)
+
+# COMMAND ----------
+
 # MAGIC %sql
 # MAGIC USE ${DA.schema_name};
 # MAGIC
